@@ -1,5 +1,3 @@
-name: Compile and Release
-
 on:
   push:
     branches:
@@ -7,7 +5,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,7 +25,7 @@ jobs:
       - name: Set Tag
         id: current-datetime
         run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
-      
+
       - name: release
         uses: actions/create-release@v1
         id: create_release
@@ -35,16 +36,15 @@ jobs:
           tag_name: ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
           body_path: CHANGELOG.md
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: upload
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/cfmd
-          asset_name: cfmd
+          asset_name: cfmd_${{ matrix.os }}
           asset_content_type: application/octet-stream
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            
