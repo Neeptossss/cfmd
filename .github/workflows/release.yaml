@@ -20,6 +20,10 @@ jobs:
           requirements: 'src/requirements.txt'
           upload_exe_with_name: 'cfmd'
           options: --onefile, --name "cfmd", --windowed, 
+
+      - name: Set Tag
+        id: current-datetime
+        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
       
       - name: release
         uses: actions/create-release@v1
@@ -27,8 +31,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: Release ${{ github.ref }}
-          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
+          tag_name: ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
