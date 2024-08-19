@@ -5,23 +5,26 @@ on:
 
 jobs:
   create_release:
-    - name: Set Tag
-      id: current-datetime
-      run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Tag
+        id: current-datetime
+        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
 
-    - name: release
-      uses: actions/create-release@v1
-      id: create_release
-      with:
-        draft: false
-        prerelease: false
-        release_name: Release ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
-        tag_name: ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
-        body_path: CHANGELOG.md
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      outputs:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: Release ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
+          tag_name: ${{ steps.current-datetime.outputs.CURRENT_DATETIME }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        outputs:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
         
   build:
     name: Build
