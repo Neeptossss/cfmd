@@ -47,7 +47,12 @@ jobs:
           spec: 'src/main.py'
           requirements: 'src/requirements.txt'
           upload_exe_with_name: cfmd_${{ matrix.os }}
-          options: --onefile, --name "cfmd_${{ matrix.os }}", --windowed, 
+          options: --onefile, --name "cfmd_${{ matrix.os }}",
+
+      - name: Download Release Asset
+        uses: actions/download-artifact@v2
+        with:
+          name: cfmd_${{ matrix.os }}
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -55,7 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: dist/cfmd_${{ matrix.os }}
+          asset_path: cfmd_${{ matrix.os }}
           asset_name: cfmd_${{ matrix.os }}
           asset_content_type: application/octet-stream
 
