@@ -19,7 +19,7 @@ jobs:
           spec: 'src/main.py'
           requirements: 'src/requirements.txt'
           upload_exe_with_name: 'cfmd'
-          options: --onefile, --name "Curseforge minecraft modpack downloader", --windowed, 
+          options: --onefile, --name "cfmd", --windowed, 
       
       - name: release
         uses: actions/create-release@v1
