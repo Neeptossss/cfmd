@@ -48,13 +48,20 @@ jobs:
           requirements: 'src/requirements.txt'
           options: --onefile, --name "cfmd_${{ matrix.os }}",
 
-      - name: Move executable if windows
-        if: matrix.os == 'windows-latest'
-        run: mv dist/cfmd_windows-latest dist/cfmd_windows.exe
+      - name: Move executable name if windows
+        run: |
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            mv dist/cfmd_${{ matrix.os }} dist/cfmd_${{ matrix.os }}.exe
+          fi
 
-      - name: Move executable if ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: mv dist/cfmd_ubuntu-latest dist/cfmd_ubuntu
+      - name: Set Asset Name
+        id: set_asset_name
+        run: |
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            echo "ASSET_NAME=cfmd_${{ matrix.os }}.exe" >> "$GITHUB_ENV"
+          else
+            echo "ASSET_NAME=cfmd_${{ matrix.os }}" >> "$GITHUB_ENV"
+          fi
 
       - name: Do a simple tree
         run: tree
@@ -65,8 +72,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: dist/cfmd_${{ matrix.os }}
-          asset_name: cfmd_${{ matrix.os }}
+          asset_path: dist/${{ steps.set_asset_name.outputs.ASSET_NAME }}
+          asset_name: ${{ env.ASSET_NAME }}
           asset_content_type: application/octet-stream
 
 
