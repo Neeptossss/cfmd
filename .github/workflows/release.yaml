@@ -48,28 +48,14 @@ jobs:
           requirements: 'src/requirements.txt'
           options: --onefile, --name "cfmd_${{ matrix.os }}",
 
-      - name: Do a simple tree
-        run: tree
-
-      - name: Do a simple pwd
-        run: pwd
-
-      - name: Set Asset Name if windows
-        if: matrix.os == 'windows-latest'
-        run: echo "ASSET_NAME=cfmd_windows-latest.exe" >> "$GITHUB_ENV"
-
-      - name: Set Asset Name if ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: echo "ASSET_NAME=cfmd_ubuntu-latest" >> "$GITHUB_ENV"
-
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: dist/${{ env.ASSET_NAME }}
-          asset_name: ${{ env.ASSET_NAME }}
+          asset_path: ${{ steps.create_exe.outputs.executable_path }}
+          asset_name: cfmd_${{ matrix.os }}.exe
           asset_content_type: application/octet-stream
 
 
