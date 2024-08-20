@@ -157,7 +157,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     if len(sys.argv) != 3:
-        print("Usage: python main.py <output_path> <curseforge_zip_path>", file=sys.stderr)
+        print("Usage: " + sys.argv[0] + " <curseforge_zip_path> <output_path>", file=sys.stderr)
         sys.exit(1)
 
     curseforge_zip_path = sys.argv[1]
