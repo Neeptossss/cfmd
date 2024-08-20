@@ -54,9 +54,9 @@ jobs:
       - name: Do a simple pwd
         run: pwd
 
-      - name: Set Asset Name if windows and rename
+      - name: Set Asset Name if windows
         if: matrix.os == 'windows-latest'
-        run: echo "ASSET_NAME=cfmd_windows-latest.exe" >> "$GITHUB_ENV" && mv dist/cfmd_windows-latest dist/cfmd_windows-latest.exe
+        run: echo "ASSET_NAME=cfmd_windows-latest.exe" >> "$GITHUB_ENV"
 
       - name: Set Asset Name if ubuntu
         if: matrix.os == 'ubuntu-latest'
