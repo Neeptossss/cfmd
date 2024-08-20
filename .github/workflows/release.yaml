@@ -48,12 +48,6 @@ jobs:
           requirements: 'src/requirements.txt'
           options: --onefile, --name "cfmd_${{ matrix.os }}",
 
-      - name: Move executable name if windows
-        run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            mv dist/cfmd_${{ matrix.os }} dist/cfmd_${{ matrix.os }}.exe
-          fi
-
       - name: Set Asset Name if windows and rename
         if: matrix.os == 'windows-latest'
         run: echo "ASSET_NAME=cfmd_windows-latest.exe" >> "$GITHUB_ENV" && mv dist/cfmd_windows-latest dist/cfmd_windows-latest.exe
