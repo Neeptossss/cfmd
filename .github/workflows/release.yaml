@@ -55,12 +55,10 @@ jobs:
           fi
 
       - name: Set Asset Name if windows and rename
-        id: set_asset_name
         if: matrix.os == 'windows-latest'
         run: echo "ASSET_NAME=cfmd_windows-latest.exe" >> "$GITHUB_ENV" && mv dist/cfmd_windows-latest dist/cfmd_windows-latest.exe
 
       - name: Set Asset Name if ubuntu
-        id: set_asset_name
         if: matrix.os == 'ubuntu-latest'
         run: echo "ASSET_NAME=cfmd_ubuntu-latest" >> "$GITHUB_ENV"
 
