@@ -48,18 +48,26 @@ jobs:
           requirements: 'src/requirements.txt'
           options: --onefile, --name "cfmd_${{ matrix.os }}",
 
-      - name: Get the output file name of the executable
-        id: get_exe_name
-        run: echo "::set-output name=exe_name::$(ls dist)"
-
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
+        if: matrix.os == 'ubuntu-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: dist/${{ steps.get_exe_name.outputs.exe_name }}
-          asset_name: ${{ steps.get_exe_name.outputs.exe_name }}
+          asset_path: dist/cfmd_ubuntu-latest
+          asset_name: cfmd_ubuntu-latest
+          asset_content_type: application/octet-stream
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        if: matrix.os == 'windows-latest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: dist/cfmd_windows-latest.exe
+          asset_name: cfmd_windows-latest.exe
           asset_content_type: application/octet-stream
 
 
