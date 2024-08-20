@@ -48,6 +48,17 @@ jobs:
           requirements: 'src/requirements.txt'
           options: --onefile, --name "cfmd_${{ matrix.os }}",
 
+      - name: Move executable if windows
+        if: matrix.os == 'windows-latest'
+        run: mv dist/cfmd_windows-latest dist/cfmd_windows.exe
+
+      - name: Move executable if ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: mv dist/cfmd_ubuntu-latest dist/cfmd_ubuntu
+
+      - name: Do a simple tree
+        run: tree
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
